@@ -63,6 +63,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    // liftingLogs   LiftingLog[]
 }
 
 model VerificationToken {
@@ -71,4 +72,29 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+//lifting log
+
+// model LiftingLog {
+//     id              String   @id @default(cuid())
+//     user            User   @relation(fields: [userId], references: [id])
+//     userId          String @unique
+//     createdAt       DateTime @default(now())
+//     updatedAt       DateTime @updatedAt
+//     workoutLog      WorkoutLog[]
+    
+
+//     @@index([userId])
+// }
+
+model WorkoutLog {
+    id              String   @id @default(cuid())
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime? @updatedAt
+    // liftingLog      LiftingLog @relation(fields: [userId], references: [userId])
+    userId          String      
+    workoutDate     DateTime
+    exercise        String
+    reps            Int
 }
