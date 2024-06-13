@@ -14,7 +14,7 @@ type RepsAndWeight = {
 }
 
 type RowData = {
-  id?: string; 
+  id: string; 
   date: Date;
   exercise: string;
   repsAndWeight: RepsAndWeight[];
@@ -49,7 +49,10 @@ export const LiftingLog = () => {
     }
   ]);
 
-  if (isLoading || isError) {
+  if (isLoading) {
+    return <div>Is Loading</div> 
+  } else 
+  if (isError) {
     return <div>There Has Been An Error Loading This Page</div>
   }
 
@@ -61,7 +64,7 @@ export const LiftingLog = () => {
     const newRow = await createLiftingLog.mutateAsync({
       ...newEmptyRow,
     });
-    setRowData([...rowData, {...newRow, date: todaysDate, repsAndWeight: [{reps: newEmptyRow.reps, weight: newEmptyRow.weight}] }]);
+    setRowData([...rowData, {...newRow, id: newRow.workoutLogId, date: todaysDate, repsAndWeight: [{reps: newEmptyRow.reps, weight: newEmptyRow.weight}] }]);
   };
 
   const onCellValueChange = async (params: any) => {
