@@ -20,20 +20,9 @@ type RowData = {
   repsAndWeight: RepsAndWeight[];
 }
 
-const initialRowData = () => {
-
-}
-
-// const updateCellValue = () => {
-//   const updatedRowData = rowData.map((row, index) =>
-//     index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
-//   );
-//   return updatedRowData;
-// }
-
 export const LiftingLog = () => {
   const todaysDate = new Date();
-  const createWorkoutLog = api.workoutLog.createWorkoutLog.useMutation({});
+  // const createWorkoutLog = api.workoutLog.createWorkoutLog.useMutation({});
   const createLiftingLog = api.liftingLog.createWorkout.useMutation({});
   const updateLiftingLog = api.liftingLog.updateWorkout.useMutation({});
   const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
@@ -63,28 +52,6 @@ export const LiftingLog = () => {
   if (isLoading || isError) {
     return <div>There Has Been An Error Loading This Page</div>
   }
-
-
-  // useEffect(() => {
-  //   if (liftingLogData) {
-  //     console.log('liftingLogData', liftingLogData);
-  //     setRowData(liftingLogData.map((log) => ({
-  //       ...log,
-  //       date: log.date,
-  //       exercise: log.exercise,
-  //       repsAndWeight: [{reps: log.reps, weight: log.weight}],
-  //       id: log.workoutLogId, 
-  //     })));
-  //   }
-  // }, [liftingLogData]);
-
-  // liftingLogData && !isLoading ? setRowData(liftingLogData.map((log) => ({
-  //     ...log,
-  //     date: log.date,
-  //     exercise: log.exercise,
-  //     repsAndWeight: [{reps: log.reps, weight: log.weight}],
-  //     id: log.workoutLogId, 
-  // }))): null;
 
   const addNewRow = () => {
     setRowData([...rowData, { date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]}]);
@@ -117,7 +84,6 @@ export const LiftingLog = () => {
       const rowId = nanoid();
       console.log('here then');
       // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
-      // console.log('workoutLog', workoutLog);
       const newRow = await createLiftingLog.mutateAsync({
         ...updatedRow, id: rowId,
       });
@@ -128,7 +94,6 @@ export const LiftingLog = () => {
       );
     }
 
-    // updateLiftingGrid.mutate(updatedRow);
   }
 
 
