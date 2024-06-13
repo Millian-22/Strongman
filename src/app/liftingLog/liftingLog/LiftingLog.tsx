@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -36,7 +36,7 @@ export const LiftingLog = () => {
   const createWorkoutLog = api.workoutLog.createWorkoutLog.useMutation({});
   const createLiftingLog = api.liftingLog.createWorkout.useMutation({});
   const updateLiftingLog = api.liftingLog.updateWorkout.useMutation({});
-  const seeMany = api.liftingLog.getAll.useQuery();
+  const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
 
 
   const [columnDefs] = useState([
@@ -50,16 +50,22 @@ export const LiftingLog = () => {
     }
   ]);
 
+  useEffect(() => {
+    if (liftingLogData) {
+      console.log('liftingLogData', liftingLogData);
+      setRowData(liftingLogData.map((log) => ({
+        ...log,
+        date: log.date,
+        exercise: log.exercise,
+        repsAndWeight: [{reps: log.reps, weight: log.weight}],
+        id: log.workoutLogId, 
+      })));
+    }
+  }, [liftingLogData]);
+
   const addNewRow = () => {
     setRowData([...rowData, { date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]}]);
   };
-
-  // const addRepsAndWeightColumn = (rowIndex: number) => {
-  //   const updatedRowData = rowData.map((row, index) =>
-  //     index === rowIndex ? { ...row, repsAndWeight: [...row.repsAndWeight, {reps: 0, weight: 0}] } : row
-  //   );
-  //   setRowData(updatedRowData);
-  // };
 
   const onCellValueChange = async (params: any) => {
     const updatedRowData = rowData.map((row, index) =>
@@ -107,7 +113,7 @@ export const LiftingLog = () => {
       <button onClick={addNewRow} style={{ marginBottom: '10px' }}>
         Add New Row
       </button>
-      <div className="ag-theme-alpine" style={{ height: 400, width: 600 }}>
+      <div className="ag-theme-alpine" style={{ height: 800, width: 600 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
@@ -119,7 +125,6 @@ export const LiftingLog = () => {
           onCellValueChanged={onCellValueChange}
         />
       </div>
-      <div>{JSON.stringify(seeMany)}</div>
     </div>
   );
 };
