@@ -20,6 +20,10 @@ type RowData = {
   repsAndWeight: RepsAndWeight[];
 }
 
+const initialRowData = () => {
+
+}
+
 // const updateCellValue = () => {
 //   const updatedRowData = rowData.map((row, index) =>
 //     index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
@@ -29,14 +33,20 @@ type RowData = {
 
 export const LiftingLog = () => {
   const todaysDate = new Date();
-  
-  const [rowData, setRowData] = useState<RowData[]>([
-    { date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}] },
-  ]);
   const createWorkoutLog = api.workoutLog.createWorkoutLog.useMutation({});
   const createLiftingLog = api.liftingLog.createWorkout.useMutation({});
   const updateLiftingLog = api.liftingLog.updateWorkout.useMutation({});
   const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
+  
+  const [rowData, setRowData] = useState<RowData[]>(!isLoading && liftingLogData ? liftingLogData.map((log) => ({
+      ...log,
+      date: log.date,
+      exercise: log.exercise,
+      repsAndWeight: [{reps: log.reps, weight: log.weight}],
+      id: log.workoutLogId, 
+  })): []);
+
+  
 
 
   const [columnDefs] = useState([
@@ -50,18 +60,31 @@ export const LiftingLog = () => {
     }
   ]);
 
-  useEffect(() => {
-    if (liftingLogData) {
-      console.log('liftingLogData', liftingLogData);
-      setRowData(liftingLogData.map((log) => ({
-        ...log,
-        date: log.date,
-        exercise: log.exercise,
-        repsAndWeight: [{reps: log.reps, weight: log.weight}],
-        id: log.workoutLogId, 
-      })));
-    }
-  }, [liftingLogData]);
+  if (isLoading || isError) {
+    return <div>There Has Been An Error Loading This Page</div>
+  }
+
+
+  // useEffect(() => {
+  //   if (liftingLogData) {
+  //     console.log('liftingLogData', liftingLogData);
+  //     setRowData(liftingLogData.map((log) => ({
+  //       ...log,
+  //       date: log.date,
+  //       exercise: log.exercise,
+  //       repsAndWeight: [{reps: log.reps, weight: log.weight}],
+  //       id: log.workoutLogId, 
+  //     })));
+  //   }
+  // }, [liftingLogData]);
+
+  // liftingLogData && !isLoading ? setRowData(liftingLogData.map((log) => ({
+  //     ...log,
+  //     date: log.date,
+  //     exercise: log.exercise,
+  //     repsAndWeight: [{reps: log.reps, weight: log.weight}],
+  //     id: log.workoutLogId, 
+  // }))): null;
 
   const addNewRow = () => {
     setRowData([...rowData, { date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]}]);
@@ -108,12 +131,13 @@ export const LiftingLog = () => {
     // updateLiftingGrid.mutate(updatedRow);
   }
 
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <button onClick={addNewRow} style={{ marginBottom: '10px' }}>
         Add New Row
       </button>
-      <div className="ag-theme-alpine" style={{ height: 800, width: 600 }}>
+      {liftingLogData ? <div className="ag-theme-alpine" style={{ height: 800, width: 600 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
@@ -124,7 +148,7 @@ export const LiftingLog = () => {
           }}
           onCellValueChanged={onCellValueChange}
         />
-      </div>
+      </div> : null}
     </div>
   );
 };
