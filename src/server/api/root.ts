@@ -1,6 +1,7 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { liftingLogRouter } from "./routers/liftingLog";
+import { workoutLogRouter } from "./routers/workoutLog";
+import { liftingLogGridRouter } from "./routers/liftingLogGrid";
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { liftingLogRouter } from "./routers/liftingLog";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
-  liftingLog: liftingLogRouter,
+  workoutLog: workoutLogRouter,
+  liftingLog: liftingLogGridRouter,
 });
 
 // export type definition of API

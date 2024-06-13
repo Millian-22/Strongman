@@ -92,9 +92,19 @@ model WorkoutLog {
     id              String   @id @default(cuid())
     createdAt       DateTime @default(now())
     updatedAt       DateTime? @updatedAt
-    // liftingLog      LiftingLog @relation(fields: [userId], references: [userId])
     userId          String      
-    workoutDate     DateTime
-    exercise        String
-    reps            Int
+    // liftingLogs LiftingLogGrid[] 
+}
+
+model LiftingLogGrid {
+//   id        String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime? @updatedAt
+  userId          String
+  workoutLogId String @id    
+  date      DateTime
+  exercise  String
+  reps      Int
+  weight    Int
+//   workoutLog   WorkoutLog @relation(fields: [workoutLogId], references: [id])
 }

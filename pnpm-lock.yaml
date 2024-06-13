@@ -35,6 +35,9 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.394
+      ag-grid-react:
+        specifier: ^31.3.2
+        version: 31.3.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -44,6 +47,9 @@ importers:
       geist:
         specifier: ^1.3.0
         version: 1.3.0(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.0.7
       next:
         specifier: ^14.2.1
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -501,6 +507,15 @@ packages:
     resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  ag-grid-community@31.3.2:
+    resolution: {integrity: sha512-GxqFRD0OcjaVRE1gwLgoP0oERNPH8Lk8wKJ1txulsxysEQ5dZWHhiIoXXSiHjvOCVMkK/F5qzY6HNrn6VeDMTQ==}
+
+  ag-grid-react@31.3.2:
+    resolution: {integrity: sha512-SFHN05bsXp901rIT00Fa6iQLCtyavoJiKaXEDUtAU5LMu+GTkjs/FPQBQ8754omgdDFr4NsS3Ri6QbqBne3rug==}
+    peerDependencies:
+      react: ^16.3.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
 
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -1313,6 +1328,11 @@ packages:
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.0.7:
+    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   natural-compare@1.4.0:
@@ -2316,6 +2336,15 @@ snapshots:
 
   acorn@8.11.3: {}
 
+  ag-grid-community@31.3.2: {}
+
+  ag-grid-react@31.3.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      ag-grid-community: 31.3.2
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   ajv@6.12.6:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -3305,6 +3334,8 @@ snapshots:
       thenify-all: 1.6.0
 
   nanoid@3.3.7: {}
+
+  nanoid@5.0.7: {}
 
   natural-compare@1.4.0: {}
 

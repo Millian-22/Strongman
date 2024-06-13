@@ -10,7 +10,7 @@ type inputType = {
     placeholder: string;
 }
 
-const convertStringtoDate = (dateString: string) => {
+export const convertStringtoDate = (dateString: string) => {
     const date = new Date(dateString);
     const isoDateString = date.toISOString();
     return isoDateString;
@@ -21,25 +21,25 @@ export const CreateLog = () => {
     const exerciseRef = useRef<HTMLInputElement>(null);
     const repsRef = useRef<HTMLInputElement>(null);
 
-    const createLift = api.liftingLog.submitLift.useMutation({});
+    // const createLift = api.workoutLog.submitLift.useMutation({});
 
 
-    const submitToLiftingLog = () => {
-        const workoutDate = workoutDateRef?.current?.value ? convertStringtoDate(workoutDateRef?.current?.value) : new Date().toString();
-        // const workoutDate = new Date(`${year}-${month}-${day}`)
-        const exercise = exerciseRef?.current?.value;
-        const reps = Number(repsRef?.current?.value);
-        // const createdAt = new Date().getTime();
-        console.log('workoutDate, exercise, reps', workoutDate, exercise, reps);
-        if (workoutDate && exercise && reps) {
-            createLift.mutate({workoutDate, exercise, reps});
-        }
+    // const submitToLiftingLog = () => {
+    //     const workoutDate = workoutDateRef?.current?.value ? convertStringtoDate(workoutDateRef?.current?.value) : new Date().toString();
+    //     // const workoutDate = new Date(`${year}-${month}-${day}`)
+    //     const exercise = exerciseRef?.current?.value;
+    //     const reps = Number(repsRef?.current?.value);
+    //     // const createdAt = new Date().getTime();
+    //     console.log('workoutDate, exercise, reps', workoutDate, exercise, reps);
+    //     if (workoutDate && exercise && reps) {
+    //         createLift.mutate({workoutDate, exercise, reps});
+    //     }
         
-    }
+    // }
 
     return (
         <>
-            <form className="grid w-full" onSubmit={submitToLiftingLog}>
+            <form className="grid w-full" onSubmit={() => {console.log('okay')}} >
                 <div className="my-3"  >
                     Workout Date:
                     <Input ref={workoutDateRef} type="text" placeholder="date" />

@@ -5,7 +5,7 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
-export const liftingLogRouter = createTRPCRouter({
+export const workoutLogRouter = createTRPCRouter({
     getLatest: protectedProcedure.query(({ ctx }) => {
         return ctx.db.workoutLog.findFirst({
           orderBy: { createdAt: "desc" },
@@ -15,19 +15,19 @@ export const liftingLogRouter = createTRPCRouter({
     getAll: protectedProcedure.query(({ctx}) => {
       return ctx.db.workoutLog.findMany();
     }),
-
-    submitLift:  protectedProcedure.input(z.object({ workoutDate: z.string().datetime(), exercise: z.string(), reps: z.number().int()  }))
-    .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
+    createWorkoutLog: protectedProcedure.input(z.object({ date: z.string().datetime()})).mutation(async ({ctx, input}) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      if (!ctx.session || !ctx.session.user) {
+        throw new Error('Unauthorized');
+      }
+
+      const userId = ctx.session?.user.id;
+      console.log('input.date', input.date);
 
       return ctx.db.workoutLog.create({
         data: {
-          createdAt: new Date(),
-          workoutDate: input.workoutDate,
-          exercise: input.exercise,
-          reps: input.reps,
-          userId: "1",
+          userId,
         },
       });
     }),

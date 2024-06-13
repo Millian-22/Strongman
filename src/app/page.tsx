@@ -3,7 +3,7 @@ import Link from "next/link";
 // import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { CreateLog, InputDemo } from "./_components/createLog";
+import { CreateLog } from "./_components/createLog";
 
 export default async function Home() {
   const hello = await api.post.hello({text: 'From Max'});
@@ -42,8 +42,8 @@ async function CrudShowcase() {
 
   const latestPost = await api.post.getLatest();
   const showSecretMessage = await api.post.getSecretMessage();
-  const testingLogApi = await api.liftingLog.getAll();
-  console.log('testingLogApi', testingLogApi);
+  // const testingLogApi = await api.workoutLog.getAll();
+  // console.log('testingLogApi', testingLogApi);
 
   return (
     <div className="w-full max-w-md">
@@ -56,9 +56,9 @@ async function CrudShowcase() {
       <div>
       <CreateLog />      
       </div>
-      <div>
+      {/* <div>
         {testingLogApi ? <p>Testing getLatest {JSON.stringify(testingLogApi)}</p> : null}
-      </div>
+      </div> */}
 
     </div>
   );
