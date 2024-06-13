@@ -18,8 +18,6 @@ export const liftingLogGridRouter = createTRPCRouter({
 
   createWorkout:  protectedProcedure.input(z.object({ date: z.string().datetime(), exercise: z.string(), reps: z.number().int(), weight: z.number(), id: z.string() }))
   .mutation(async ({ ctx, input }) => {
-    // simulate a slow db call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (!ctx.session || !ctx.session.user) {
       throw new Error('Unauthorized');

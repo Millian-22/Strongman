@@ -10,7 +10,7 @@ type inputType = {
     placeholder: string;
 }
 
-export const convertStringtoDate = (dateString: string) => {
+export const convertStringtoDate = (dateString: string | Date) => {
     const date = new Date(dateString);
     const isoDateString = date.toISOString();
     return isoDateString;

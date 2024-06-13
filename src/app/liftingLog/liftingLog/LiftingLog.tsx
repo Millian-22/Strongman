@@ -53,8 +53,15 @@ export const LiftingLog = () => {
     return <div>There Has Been An Error Loading This Page</div>
   }
 
-  const addNewRow = () => {
-    setRowData([...rowData, { date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]}]);
+  const addNewRow = async () => {
+    const rowId = nanoid();
+    console.log('here then');
+    const newEmptyRow = { id: rowId, date: convertStringtoDate(todaysDate), exercise: '', reps: 0, weight: 0};
+    // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
+    const newRow = await createLiftingLog.mutateAsync({
+      ...newEmptyRow,
+    });
+    setRowData([...rowData, {...newRow, date: todaysDate, repsAndWeight: [{reps: newEmptyRow.reps, weight: newEmptyRow.weight}] }]);
   };
 
   const onCellValueChange = async (params: any) => {
@@ -80,19 +87,20 @@ export const LiftingLog = () => {
     if(updatedRow.id) {
       console.log('getting here');
       updateLiftingLog.mutate(updatedRow);
-    } else {
-      const rowId = nanoid();
-      console.log('here then');
-      // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
-      const newRow = await createLiftingLog.mutateAsync({
-        ...updatedRow, id: rowId,
-      });
-      setRowData(
-        rowData.map((row, index) =>
-          index === params.node.rowIndex ? { ...row, id: newRow.workoutLogId } : row
-        )
-      );
     }
+    // else {
+    //   const rowId = nanoid();
+    //   console.log('here then');
+    //   // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
+    //   const newRow = await createLiftingLog.mutateAsync({
+    //     ...updatedRow, id: rowId,
+    //   });
+    //   setRowData(
+    //     rowData.map((row, index) =>
+    //       index === params.node.rowIndex ? { ...row, id: newRow.workoutLogId } : row
+    //     )
+    //   );
+    // }
 
   }
 
