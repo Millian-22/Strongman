@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { api } from '~/trpc/react';
 import { convertStringtoDate } from '~/app/_components/createLog';
 import { nanoid } from 'nanoid';
+import { type CellValueChangedEvent } from 'ag-grid-community';
 
 type RepsAndWeight = {
   reps: number; 
@@ -27,12 +28,12 @@ export const LiftingLog = () => {
   const updateLiftingLog = api.liftingLog.updateWorkout.useMutation({});
   const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
   
-  const [rowData, setRowData] = useState<RowData[]>(!isLoading && liftingLogData ? liftingLogData.map((log) => ({
+  const [rowData, setRowData] = useState<RowData[]>(!isError && liftingLogData ? liftingLogData.map((log) => ({
       ...log,
       date: log.date,
       exercise: log.exercise,
       repsAndWeight: [{reps: log.reps, weight: log.weight}],
-      id: log.workoutLogId, 
+      id: log.workoutLogId as string, 
   })): []);
 
   
@@ -58,16 +59,14 @@ export const LiftingLog = () => {
 
   const addNewRow = async () => {
     const rowId = nanoid();
-    console.log('here then');
     const newEmptyRow = { id: rowId, date: convertStringtoDate(todaysDate), exercise: '', reps: 0, weight: 0};
-    // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
     const newRow = await createLiftingLog.mutateAsync({
       ...newEmptyRow,
     });
-    setRowData([...rowData, {...newRow, id: newRow.workoutLogId, date: todaysDate, repsAndWeight: [{reps: newEmptyRow.reps, weight: newEmptyRow.weight}] }]);
+    setRowData([...rowData, {...newRow, id: newRow.workoutLogId as string, date: todaysDate, repsAndWeight: [{reps: newRow.reps, weight: newRow.weight}] }]);
   };
 
-  const onCellValueChange = async (params: any) => {
+  const onCellValueChange = async (params: CellValueChangedEvent<RowData>) => {
     const updatedRowData = rowData.map((row, index) =>
       index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
     );
@@ -91,20 +90,6 @@ export const LiftingLog = () => {
       console.log('getting here');
       updateLiftingLog.mutate(updatedRow);
     }
-    // else {
-    //   const rowId = nanoid();
-    //   console.log('here then');
-    //   // const workoutLog = await createWorkoutLog.mutateAsync({ date: updatedRow.date});
-    //   const newRow = await createLiftingLog.mutateAsync({
-    //     ...updatedRow, id: rowId,
-    //   });
-    //   setRowData(
-    //     rowData.map((row, index) =>
-    //       index === params.node.rowIndex ? { ...row, id: newRow.workoutLogId } : row
-    //     )
-    //   );
-    // }
-
   }
 
 

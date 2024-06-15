@@ -3,12 +3,7 @@
 import { useRef } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { api } from "~/trpc/react";
 
-
-type inputType = {
-    placeholder: string;
-}
 
 export const convertStringtoDate = (dateString: string | Date) => {
     const date = new Date(dateString);
