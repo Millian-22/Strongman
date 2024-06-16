@@ -25,9 +25,6 @@ export const liftingLogGridRouter = createTRPCRouter({
 
     const userId = ctx.session?.user.id;
 
-    console.log('userId', userId);
-    console.log('date', input.date);
-
     return ctx.db.liftingLogGrid.create({
       data: {
         createdAt: new Date(),
@@ -48,7 +45,6 @@ export const liftingLogGridRouter = createTRPCRouter({
     if (!ctx.session || !ctx.session.user) {
       throw new Error('Unauthorized');
     }
-
     const userId = ctx.session?.user.id;
 
     console.log('userId', userId);

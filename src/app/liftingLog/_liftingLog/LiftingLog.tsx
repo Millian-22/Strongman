@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -54,8 +54,10 @@ export const LiftingLog = () => {
   const onRemoveSelected = useCallback(async () => {
     const selectedData = gridRef.current!.api.getSelectedRows();
     const deletedID = selectedData[0]?.id;
-    const deleted = await deleteExercise.mutateAsync({id: deletedID });
-    const res = gridRef.current!.api.applyTransaction({
+    
+    await deleteExercise.mutateAsync({id: deletedID });
+    
+    gridRef.current!.api.applyTransaction({
       remove: selectedData,
     })!
 
@@ -68,9 +70,6 @@ export const LiftingLog = () => {
 
     setRowData(updatedRowData);
   }, [deleteExercise]);
-
-
-  
 
   if (isLoading) {
     return <div>Is Loading</div> 
@@ -120,16 +119,16 @@ export const LiftingLog = () => {
 
   return (
       <div className="h-full">
-        <div className='flex flex-row align-middle gap-4 mb-4'> 
-        <button onClick={addNewRow}>
+        <div className='flex flex-row align-middle justify-center gap-20 mb-4'> 
+        <button className="rounded-full bg-orange-400 px-10 py-3 font-semibold" onClick={addNewRow}>
           Add New Row
         </button>
-        <button onClick={onRemoveSelected}>
+        <button className="rounded-full bg-orange-400 px-10 py-3 font-semibold" onClick={onRemoveSelected}>
           Delete A Row
         </button>
         </div>
-        <div className='flex flex-row align-middle justify-center'> 
-          <div className="ag-theme-alpine overflow-y-scroll h-[75lvh] max-h-[700px] w-[600px]">
+        <div className='flex flex-row align-middle justify-center w-full h-full'> 
+          <div className="ag-theme-alpine overflow-y-scroll h-[75lvh] max-h-[700px]" style={{width: 600}}>
             <AgGridReact
               rowData={rowData ?? defaultWorkoutData}
               columnDefs={columnDefs}
