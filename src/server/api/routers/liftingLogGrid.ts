@@ -65,4 +65,13 @@ export const liftingLogGridRouter = createTRPCRouter({
       },
     });
   }),
+  deleteExercise: protectedProcedure.input(z.object({id: z.string()})).mutation(async({ ctx, input}) => {
+    if (!ctx.session || !ctx.session.user) {
+      throw new Error('Unauthorized');
+    }
+
+    return ctx.db.liftingLogGrid.delete({
+      where: { workoutLogId: input.id }, 
+    })
+  })
 });

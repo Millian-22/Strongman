@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -23,20 +23,20 @@ type RowData = {
 
 export const LiftingLog = () => {
   const todaysDate = new Date();
-  // const createWorkoutLog = api.workoutLog.createWorkoutLog.useMutation({});
+  const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
   const createLiftingLog = api.liftingLog.createWorkout.useMutation({});
   const updateLiftingLog = api.liftingLog.updateWorkout.useMutation({});
-  const {data: liftingLogData, isLoading, isError} = api.liftingLog.getAll.useQuery();
-  
-  const [rowData, setRowData] = useState<RowData[]>(!isError && liftingLogData ? liftingLogData.map((log) => ({
-      ...log,
-      date: log.date,
-      exercise: log.exercise,
-      repsAndWeight: [{reps: log.reps, weight: log.weight}],
-      id: log.workoutLogId as string, 
-  })): []);
+  const deleteExercise = api.liftingLog.deleteExercise.useMutation({});
 
-  
+  const [rowData, setRowData] = useState<RowData[]>();
+  const gridRef = useRef<AgGridReact>(null);
+
+  const defaultWorkoutData = liftingLogData && liftingLogData.length > 0 ? liftingLogData.map((log) => ({
+    date: log.date,
+    exercise: log.exercise,
+    repsAndWeight: [{reps: log.reps, weight: log.weight}],
+    id: log.workoutLogId as string, 
+})): [];
 
 
   const [columnDefs] = useState([
@@ -50,6 +50,28 @@ export const LiftingLog = () => {
     }
   ]);
 
+
+  const onRemoveSelected = useCallback(async () => {
+    const selectedData = gridRef.current!.api.getSelectedRows();
+    const deletedID = selectedData[0]?.id;
+    const deleted = await deleteExercise.mutateAsync({id: deletedID });
+    const res = gridRef.current!.api.applyTransaction({
+      remove: selectedData,
+    })!
+
+    const rowData = gridRef?.current?.props?.rowData; 
+    const updatedRowData = rowData?.filter((row) => {
+      if ((row?.id !== deletedID)) {
+        return row
+      }
+    });
+
+    setRowData(updatedRowData);
+  }, [deleteExercise]);
+
+
+  
+
   if (isLoading) {
     return <div>Is Loading</div> 
   } else 
@@ -59,57 +81,70 @@ export const LiftingLog = () => {
 
   const addNewRow = async () => {
     const rowId = nanoid();
+    //should clean up maybe the prisma table on the table to fix this 
+    //either nest, or in the queries convert repsAndWeight into the right variables. 
     const newEmptyRow = { id: rowId, date: convertStringtoDate(todaysDate), exercise: '', reps: 0, weight: 0};
+    const newRowData =  {id: rowId, date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]};
     const newRow = await createLiftingLog.mutateAsync({
       ...newEmptyRow,
     });
-    setRowData([...rowData, {...newRow, id: newRow.workoutLogId as string, date: todaysDate, repsAndWeight: [{reps: newRow.reps, weight: newRow.weight}] }]);
+    if (!defaultWorkoutData) {
+      return;
+    }
+    const oldRowData = rowData ? rowData : defaultWorkoutData;
+    setRowData([ ...oldRowData, { ...newRowData }]);
   };
 
   const onCellValueChange = async (params: CellValueChangedEvent<RowData>) => {
-    const updatedRowData = rowData.map((row, index) =>
-      index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
-    );
+    const rowsToUpdate = rowData ? rowData : defaultWorkoutData;
+    const updatedRowData = rowsToUpdate?.map((row, index) =>
+      {
+        return index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
+      }
+    ) ;
 
     setRowData(updatedRowData);
-
-    console.log('params', params);
 
     const updatedRow = {
       id: params.data.id,
       date: convertStringtoDate(params.data.date),
       exercise: params.data.exercise,
-      reps: Number(params.data.reps),
-      weight: params.data.weight ? Number(params.data.weight): 0,
+      reps: params?.data?.repsAndWeight?.[0]?.reps ? Number(params?.data?.repsAndWeight?.[0]?.reps): 0,
+      weight: params?.data?.repsAndWeight?.[0]?.reps ? Number(params?.data?.repsAndWeight?.[0]?.weight): 0,
     };
 
-    console.log('id', updatedRow.id);
-
-    console.log('updatedRow', updatedRow);
     if(updatedRow.id) {
-      console.log('getting here');
       updateLiftingLog.mutate(updatedRow);
     }
   }
 
-
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <button onClick={addNewRow} style={{ marginBottom: '10px' }}>
-        Add New Row
-      </button>
-      {liftingLogData ? <div className="ag-theme-alpine" style={{ height: 800, width: 600 }}>
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={columnDefs}
-          defaultColDef={{
-            editable: true,
-            flex: 1,
-            resizable: true,
-          }}
-          onCellValueChanged={onCellValueChange}
-        />
-      </div> : null}
-    </div>
+      <div className="h-full">
+        <div className='flex flex-row align-middle gap-4 mb-4'> 
+        <button onClick={addNewRow}>
+          Add New Row
+        </button>
+        <button onClick={onRemoveSelected}>
+          Delete A Row
+        </button>
+        </div>
+        <div className='flex flex-row align-middle justify-center'> 
+          <div className="ag-theme-alpine overflow-y-scroll h-[75lvh] max-h-[700px] w-[600px]">
+            <AgGridReact
+              rowData={rowData ?? defaultWorkoutData}
+              columnDefs={columnDefs}
+              defaultColDef={{
+                editable: true,
+                flex: 1,
+                resizable: true,
+              }}
+              onCellValueChanged={onCellValueChange}
+              suppressScrollOnNewData={true}
+              rowSelection='multiple'
+              ref={gridRef}
+            />
+          </div>
+        </div>
+      </div>
   );
 };
