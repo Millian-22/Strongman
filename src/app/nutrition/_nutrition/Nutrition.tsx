@@ -1,11 +1,12 @@
+import { Chatbox } from "./Chatbox";
 
 
 export const Nutrition = () => {
-
   
   return (
-    <div>
-      Nutrition!
-    </div>
+    <>
+      <Chatbox />
+        <p className="justify-end">Nutrition!</p>
+      </>
   )
 };

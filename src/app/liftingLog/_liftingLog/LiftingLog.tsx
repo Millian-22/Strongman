@@ -128,7 +128,7 @@ export const LiftingLog = () => {
         </button>
         </div>
         <div className='flex flex-row align-middle justify-center w-full h-full'> 
-          <div className="ag-theme-alpine overflow-y-scroll h-[75lvh] max-h-[700px]" style={{width: 600}}>
+          <div className="ag-theme-alpine overflow-y-scroll h-[75lvh] max-h-[700px]" style={{width: '50%'}}>
             <AgGridReact
               rowData={rowData ?? defaultWorkoutData}
               columnDefs={columnDefs}
