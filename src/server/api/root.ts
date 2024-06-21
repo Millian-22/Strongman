@@ -2,7 +2,7 @@ import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { workoutLogRouter } from "./routers/workoutLog";
 import { liftingLogGridRouter } from "./routers/liftingLogGrid";
-import { openAIRouter } from "./routers/openaiRoute";
+import { openAIRouter } from "./routers/openAI";
 
 /**
  * This is the primary router for your server.

@@ -1,9 +1,6 @@
 import { getServerAuthSession } from "~/server/auth";
 import { Nutrition } from "./_nutrition/Nutrition";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { openai } from "~/server/openai";
-import { openAIRouter } from "~/server/api/routers/openaiRoute";
 
 export default async function nutritionPage() {
   const session = await getServerAuthSession();
