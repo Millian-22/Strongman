@@ -2,7 +2,8 @@
 import OpenAI from 'openai';
 
 export const openai = new OpenAI({
+  organization: process.env.OPENAI_ORG_KEY,
+  project: process.env.OPENAI_PROJECT_KEY,
   apiKey: process.env.OPENAI_API_KEY,
-  organization: "org-VN07EVILyxzNxI8fqT7SOId5",
-  project: "proj_Nc7nKJvXGEUiMD0sbiKhNrkB",
 })
+

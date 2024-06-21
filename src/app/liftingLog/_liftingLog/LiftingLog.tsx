@@ -38,7 +38,6 @@ export const LiftingLog = () => {
     id: log.workoutLogId as string, 
 })): [];
 
-
   const [columnDefs] = useState([
     { headerName: 'Date', field: 'date', editable: true, cellDataType: 'date' },
     { headerName: 'Exercise', field: 'exercise', editable: true },
@@ -49,7 +48,6 @@ export const LiftingLog = () => {
       ],
     }
   ]);
-
 
   const onRemoveSelected = useCallback(async () => {
     const selectedData = gridRef.current!.api.getSelectedRows();
@@ -100,7 +98,7 @@ export const LiftingLog = () => {
       {
         return index === params.node.rowIndex ? { ...row, [params.colDef.field]: params.newValue } : row
       }
-    ) ;
+    );
 
     setRowData(updatedRowData);
 

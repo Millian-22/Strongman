@@ -2,7 +2,6 @@ import { getServerAuthSession } from "~/server/auth";
 import { LiftingLog } from "./_liftingLog/LiftingLog";
 import Link from "next/link";
 
-
 export default async function LiftingLogPage() {
   const session = await getServerAuthSession();
   if (!session?.user) return null;

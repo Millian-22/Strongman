@@ -23,6 +23,8 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url()
     ),
     OPENAI_API_KEY: z.string(),
+    OPENAI_PROJECT_KEY: z.string(),
+    OPENAI_ORG_KEY: z.string(),
     GITHUB_CLIENT_ID : z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID : z.string(),
@@ -52,6 +54,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID : process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_ORG_KEY: process.env.OPENAI_ORG_KEY,
+    OPENAI_PROJECT_KEY: process.env.OPENAI_PROJECT_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

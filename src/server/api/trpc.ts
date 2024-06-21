@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
+import { openai } from "../openai";
 
 /**
  * 1. CONTEXT
@@ -30,6 +31,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await getServerAuthSession();
 
   return {
+    openai,
     db,
     session,
     ...opts,
@@ -45,6 +47,9 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  */
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
+  experimental: {
+    iterablesAndDeferreds: true,
+  },
   errorFormatter({ shape, error }) {
     return {
       ...shape,
