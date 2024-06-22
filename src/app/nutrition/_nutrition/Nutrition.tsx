@@ -11,24 +11,9 @@ export const Nutrition = () => {
   const [words, setWords] = useState<string[]>([]);
   
 
-  // const testingOpenAI = await openai.chat.completions.create({
-  //   messages: [{ role: "system", content: "You are a helpful nutrition-focused assistant." }],
-  //   model: "gpt-3.5-turbo",
-  //   stream: true,
-  // });
-
-
-
-
-  const onHandleSubmit = (event) => {
-    event.preventDefault();
-    // setConversation([...conversation, {role: "user", content: inputValue}]);
-    //set the message  
-  };
-
   return (
     <section className="h-[75lvh]">
-      <Chatbox onHandleSubmit={onHandleSubmit} setInputValue={setInputValue}/>
+      <Chatbox />
       <div className="flex flex-row w-full h-1/2 justify-center items-center">
         <div className="flex flex-row h-full w-2/3 justify-between py-3 gap-x-20">
           <div className="bg-gray-500 w-2/4 border-white rounded-md text-white">Box Box</div>
