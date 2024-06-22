@@ -6,49 +6,6 @@ export default async function nutritionPage() {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
 
-
-  //need to set the state to the message, and once that's set, send an API request. On submit. 
-  //which is actually onKeyPress I think
-
-  //I still think this could be routed through TRPC
-
-  // const testingOpenAI = await openai.chat.completions.create({
-  //   messages: [{ role: "system", content: "You are a helpful nutrition-focused assistant." }],
-  //   model: "gpt-3.5-turbo",
-  //   stream: true,
-  // });
-  //   const testingOpenAI = await openAIRouter.testStream.chat.completions.create({
-  //   messages: [{ role: "system", content: "You are a helpful nutrition-focused assistant." }],
-  //   model: "gpt-3.5-turbo",
-  //   stream: true,
-  // });
-
-  // let string = '';
-
-  // const toDisplay = async () => {
-  // };
-
-  
-  // const messages = [];
-
-  // console.log('testingOpenAI', testingOpenAI);
-
-
-  // for await (const chunk of testingOpenAI) {
-  //   const individualMessage = chunk.choices[0]?.delta?.content;
-  //   if (individualMessage && individualMessage !== ''){ 
-  //     messages.push(individualMessage);
-  //   }
-    
-    // (chunk.choices[0]?.delta?.content || "");
-// }
-
-  //   for await (const chunk of stream) {
-  //     process.stdout.write(chunk.choices[0]?.delta?.content || "");
-  // }
-  
-  
-
   return (
     <main className="bg-gradient-to-b from-[#2E8B57] to-[#fff] h-lvh overflow-y-hidden text-white">
         <div className="flex flex-row w-full justify-between p-5">
