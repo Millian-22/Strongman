@@ -6,11 +6,10 @@ import { Chatbox } from "./Chatbox";
 export const Nutrition = () => {
 
   // { role: "system", content: "You are a helpful nutrition-focused assistant." }
-  const [inputValue, setInputValue] = useState('');
-  const [conversation, setConversation] = useState<string[]>([]);
-  const [words, setWords] = useState<string[]>([]);
+  // const [inputValue, setInputValue] = useState('');
+  // const [conversation, setConversation] = useState<string[]>([]);
+  // const [words, setWords] = useState<string[]>([]);
   
-
   return (
     <section className="h-[75lvh]">
       <Chatbox />

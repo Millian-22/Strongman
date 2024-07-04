@@ -35,7 +35,7 @@ export const LiftingLog = () => {
     date: log.date,
     exercise: log.exercise,
     repsAndWeight: [{reps: log.reps, weight: log.weight}],
-    id: log.workoutLogId as string, 
+    id: log.workoutLogId, 
 })): [];
 
   const [columnDefs] = useState([
