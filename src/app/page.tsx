@@ -3,45 +3,63 @@ import Link from "next/link";
 // import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import { CreateLog } from "./_components/createLog";
 
 export default async function Home() {
   const hello = await api.post.hello({text: 'From Max'});
   const session = await getServerAuthSession();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2E8B57] to-[#fff] text-white">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#6495ED] to-[#15162c] text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <div className="flex flex-col items-center gap-2">
           <p className="text-2xl text-white">
             {hello ? hello.greeting : "Loading tRPC query..."}
           </p>
+
           <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-center text-2xl text-white">
               {session && <span>Logged in as {session.user?.name}</span>}
             </p>
-            <div className="flex flex-row gap-x-10">
-              <Link
-                href={"/nutrition"}
-                className="rounded-full bg-orange-400 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-              >
-                Nutrition Page
-              </Link>
-              {session ? <Link
-                href={"/liftingLog"}
-                className="rounded-full bg-orange-400 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-              >
-                Lifting Log
-              </Link>: null}
-            </div>
-            {session ? <Link
-              href={"/nutrition"}
-              className="rounded-full bg-purple-800 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+            <Link
+              href={session ? "/api/auth/signout" : "/api/auth/signin"}
+              className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
             >
               {session ? "Sign out" : "Sign in"}
-            </Link>: null}
+            </Link>
           </div>
         </div>
+
+        <CrudShowcase />
       </div>
     </main>
+  );
+}
+
+async function CrudShowcase() {
+  const session = await getServerAuthSession();
+  if (!session?.user) return null;
+
+  const latestPost = await api.post.getLatest();
+  const showSecretMessage = await api.post.getSecretMessage();
+  // const testingLogApi = await api.workoutLog.getAll();
+  // console.log('testingLogApi', testingLogApi);
+
+  return (
+    <div className="w-full max-w-md">
+      {latestPost ? (
+        <p className="truncate">Your most recent post: {latestPost.name}</p>
+      ) : (
+        <p>You have no posts yet.</p>
+      )}
+      {showSecretMessage ? <p> Showing Secret Msg: {showSecretMessage} </p>: <p>something else </p>}
+      <div>
+      <CreateLog />      
+      </div>
+      {/* <div>
+        {testingLogApi ? <p>Testing getLatest {JSON.stringify(testingLogApi)}</p> : null}
+      </div> */}
+
+    </div>
   );
 }
