@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useCallback, useRef, useState } from 'react';
-import { AgGridReact } from 'ag-grid-react';
+import { type CellValueChangedEvent } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { api } from '~/trpc/react';
-import { convertStringtoDate } from '~/app/_components/createLog';
+import { AgGridReact } from 'ag-grid-react';
 import { nanoid } from 'nanoid';
-import { type CellValueChangedEvent } from 'ag-grid-community';
+import { useCallback, useRef, useState } from 'react';
+import { convertStringtoDate } from '~/app/_components/createLog';
+import { api } from '~/trpc/react';
 
 type RepsAndWeight = {
   reps: number; 
@@ -80,11 +80,11 @@ export const LiftingLog = () => {
     const rowId = nanoid();
     //should clean up maybe the prisma table on the table to fix this 
     //either nest, or in the queries convert repsAndWeight into the right variables. 
-    const newEmptyRow = { id: rowId, date: convertStringtoDate(todaysDate), exercise: '', reps: 0, weight: 0};
+    // const newEmptyRow = { id: rowId, date: convertStringtoDate(todaysDate), exercise: '', reps: 0, weight: 0};
     const newRowData =  {id: rowId, date: todaysDate, exercise: '', repsAndWeight: [{reps: 0, weight: 0}]};
-    const newRow = await createLiftingLog.mutateAsync({
-      ...newEmptyRow,
-    });
+    // const newRow = await createLiftingLog.mutateAsync({
+    //   ...newEmptyRow,
+    // });
     if (!defaultWorkoutData) {
       return;
     }

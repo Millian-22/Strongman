@@ -1,10 +1,10 @@
+import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 import { LiftingLog } from "./_liftingLog/LiftingLog";
-import Link from "next/link";
 
 export default async function LiftingLogPage() {
   const session = await getServerAuthSession();
-  if (!session?.user) return null;
+  // if (!session?.user) return null;
 
   return (
       <main className="bg-gradient-to-b from-[#2E8B57] to-[#fff] h-lvh overflow-y-hidden text-white">

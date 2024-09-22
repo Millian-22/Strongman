@@ -1,10 +1,10 @@
+import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 import { Nutrition } from "./_nutrition/Nutrition";
-import Link from "next/link";
 
 export default async function nutritionPage() {
   const session = await getServerAuthSession();
-  if (!session?.user) return null;
+  // if (!session?.user) return null;
 
   return (
     <main className="bg-gradient-to-b from-[#2E8B57] to-[#fff] h-lvh overflow-y-hidden text-white">
@@ -18,7 +18,6 @@ export default async function nutritionPage() {
           </Link>
         </div>
         <Nutrition />
-        {/* <div>{toDisplay()}</div> */}
       </main>
   
   )
