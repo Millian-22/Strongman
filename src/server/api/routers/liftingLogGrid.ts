@@ -19,9 +19,9 @@ export const liftingLogGridRouter = createTRPCRouter({
   createWorkout:  protectedProcedure.input(z.object({ date: z.string().datetime(), exercise: z.string(), reps: z.number().int(), weight: z.number(), id: z.string() }))
   .mutation(async ({ ctx, input }) => {
 
-    if (!ctx.session || !ctx.session.user) {
-      throw new Error('Unauthorized');
-    }
+    // if (!ctx.session || !ctx.session.user) {
+    //   throw new Error('Unauthorized');
+    // }
 
     const userId = ctx.session?.user.id;
 
@@ -42,10 +42,11 @@ export const liftingLogGridRouter = createTRPCRouter({
     // simulate a slow db call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    if (!ctx.session || !ctx.session.user) {
-      throw new Error('Unauthorized');
-    }
-    const userId = ctx.session?.user.id;
+    // if (!ctx.session || !ctx.session.user) {
+    //   throw new Error('Unauthorized');
+    // }
+    // const userId = ctx.session?.user.id;
+    const userId = '11111111';
 
     console.log('userId', userId);
 
@@ -62,9 +63,9 @@ export const liftingLogGridRouter = createTRPCRouter({
     });
   }),
   deleteExercise: protectedProcedure.input(z.object({id: z.string()})).mutation(async({ ctx, input}) => {
-    if (!ctx.session || !ctx.session.user) {
-      throw new Error('Unauthorized');
-    }
+    // if (!ctx.session || !ctx.session.user) {
+    //   throw new Error('Unauthorized');
+    // }
 
     return ctx.db.liftingLogGrid.delete({
       where: { workoutLogId: input.id }, 

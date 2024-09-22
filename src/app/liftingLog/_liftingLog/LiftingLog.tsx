@@ -38,6 +38,8 @@ export const LiftingLog = () => {
     id: log.workoutLogId, 
 })): [];
 
+console.log('defaultWorkoutData', defaultWorkoutData);
+
   const [columnDefs] = useState([
     { headerName: 'Date', field: 'date', editable: true, cellDataType: 'date' },
     { headerName: 'Exercise', field: 'exercise', editable: true },
@@ -69,12 +71,13 @@ export const LiftingLog = () => {
     setRowData(updatedRowData);
   }, [deleteExercise]);
 
-  if (isLoading) {
-    return <div>Is Loading</div> 
-  } else 
-  if (isError) {
-    return <div>There Has Been An Error Loading This Page</div>
-  }
+  // if (isLoading) {
+  //   return <div>Is Loading</div> 
+  // } 
+  // else 
+  // if (isError) {
+  //   return <div>There Has Been An Error Loading This Page</div>
+  // }
 
   const addNewRow = async () => {
     const rowId = nanoid();
